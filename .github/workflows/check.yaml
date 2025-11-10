@@ -1,34 +1,25 @@
-on:
-  pull_request:
-  workflow_call:
-
-jobs:
-  test:
-    strategy:
-      matrix:
-        runner: [ubuntu-latest, macos-latest]
-    runs-on: ${{ matrix.runner }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
-      - name: test
-        run: nix develop --command cargo test
-
-  clippy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
-      - name: clippy
-        run: nix develop --command cargo clippy --all-targets -- --deny warnings
-
-  fmt:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
-      - name: fmt
-        run: nix develop --command cargo fmt --check
+{
+  "jobs": {
+    "check": {
+      "runs-on": "ubuntu-latest",
+      "steps": [
+        {
+          "uses": "actions/checkout@v5"
+        },
+        {
+          "uses": "cachix/install-nix-action@master"
+        },
+        {
+          "uses": "DeterminateSystems/magic-nix-cache-action@main"
+        },
+        {
+          "run": "nix flake --print-build-logs --accept-flake-config check"
+        }
+      ]
+    }
+  },
+  "on": {
+    "push": {},
+    "workflow_call": {}
+  }
+}

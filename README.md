@@ -1,1 +1,1 @@
-<h1>htnl</h1><p><a href="https://nix.dev/tutorials/nix-language">Nix</a> library for declaring <a href="https://html.spec.whatwg.org">HTML</a></p><p><a href="https://htnl.molybdenum.software/"><code>https://htnl.molybdenum.software/</code></a></p>
+<h1>eelco</h1><p><a href="https://nix.dev/">Nix</a>-powered documentation authoring library</p><p><a href="https://eelco.molybdenum.software/"><code>https://eelco.molybdenum.software/</code></a></p>
