@@ -1,8 +1,6 @@
 {
   nixConfig = {
-    # FIXME uncomment after upstream resolved
-    # https://github.com/nix-community/nix-unit/pull/274
-    #abort-on-warn = true;
+    abort-on-warn = true;
     allow-import-from-derivation = false;
     extra-experimental-features = [ "pipe-operators" ];
   };
