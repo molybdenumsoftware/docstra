@@ -16,7 +16,7 @@
         };
         ir = lib.mkOption {
           type = lib.types.unspecified;
-          default = p { } [
+          default = [
             (a { href = "https://nix.dev/"; } "Nix")
             "-powered documentation authoring library"
           ];

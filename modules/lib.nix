@@ -1,11 +1,13 @@
 {
   lib,
   rootPath,
+  config,
   ...
 }:
 {
-  options.flake.lib = lib.mkOption {
+  options.lib = lib.mkOption {
     type = lib.types.unspecified;
     default = import rootPath { inherit lib; };
   };
+  config.flake = { inherit (config) lib; };
 }

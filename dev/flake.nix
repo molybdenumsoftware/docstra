@@ -1,6 +1,5 @@
 {
   inputs = {
-
     files.url = "github:mightyiam/files";
 
     git-hooks = {
@@ -40,12 +39,6 @@
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    htnl = {
-      url = "github:molybdenumsoftware/htnl";
-      inputs.nixpkgs-lib.follows = "nixpkgs";
-      inputs.flake-parts.follows = "dedupe_flake-parts";
     };
   };
 

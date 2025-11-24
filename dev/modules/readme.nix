@@ -21,7 +21,7 @@
             in
             [
               (h1 config.metadata.title)
-              config.metadata.description.ir
+              (p config.metadata.description.ir)
               (p (
                 a { href = config.metadata.website.url; } [
                   (code config.metadata.website.url)

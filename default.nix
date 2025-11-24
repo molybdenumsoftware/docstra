@@ -1,1 +1,1 @@
-{ ... }: { }
+import ./bare/impl
