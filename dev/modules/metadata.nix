@@ -7,7 +7,7 @@
     {
       title = lib.mkOption {
         type = lib.types.singleLineStr;
-        default = "eelco";
+        default = "docstra";
       };
       description = {
         plaintext = lib.mkOption {
@@ -25,11 +25,11 @@
       };
       website.url = lib.mkOption {
         type = lib.types.singleLineStr;
-        default = "https://eelco.molybdenum.software/";
+        default = "https://docstra.molybdenum.software/";
       };
       repository.url = lib.mkOption {
         type = lib.types.singleLineStr;
-        default = "https://github.com/molybdenumsoftware/eelco";
+        default = "https://github.com/molybdenumsoftware/docstra";
       };
     };
 }

@@ -223,7 +223,7 @@ in
     lib.evalModules (
       args
       // {
-        class = "eelco";
+        class = "docstra";
         modules = lib.concat implModules modules;
       }
     );

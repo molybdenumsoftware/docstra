@@ -1,1 +1,1 @@
-<h1>eelco</h1><p><a href="https://nix.dev/">Nix</a>-powered documentation authoring library</p><p><a href="https://eelco.molybdenum.software/"><code>https://eelco.molybdenum.software/</code></a></p>
+<h1>docstra</h1><p><a href="https://nix.dev/">Nix</a>-powered documentation authoring library</p><p><a href="https://docstra.molybdenum.software/"><code>https://docstra.molybdenum.software/</code></a></p>
