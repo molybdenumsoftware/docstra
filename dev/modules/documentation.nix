@@ -101,8 +101,9 @@
               runs-on = "ubuntu-latest";
               steps = [
                 { uses = "actions/checkout@v4"; }
-                { uses = "cachix/install-nix-action@master"; }
-                { uses = "DeterminateSystems/magic-nix-cache-action@main"; }
+              ]
+              ++ config.githubActions.setUpNix
+              ++ [
                 { run = "nix build -vv --print-build-logs --accept-flake-config .#website"; }
                 {
                   uses = "actions/upload-pages-artifact@v4";

@@ -1,5 +1,23 @@
+{ lib, config, ... }:
 {
-  perSystem =
+  options.githubActions.setUpNix = lib.mkOption {
+    type = lib.types.listOf (lib.types.attrsOf lib.types.unspecified);
+    readOnly = true;
+    default = [
+      {
+        uses = "nixbuild/nix-quick-install-action@master";
+        "with".nix_conf = ''
+          keep-env-derivations = true
+          keep-outputs = true
+        '';
+      }
+      {
+        uses = "nix-community/cache-nix-action@main";
+        "with".primary-key = "a-single-key";
+      }
+    ];
+  };
+  config.perSystem =
     { pkgs, ... }:
     let
       path_ = ".github/workflows/check.yaml";
@@ -17,8 +35,9 @@
               runs-on = "ubuntu-latest";
               steps = [
                 { uses = "actions/checkout@v5"; }
-                { uses = "cachix/install-nix-action@master"; }
-                { uses = "DeterminateSystems/magic-nix-cache-action@main"; }
+              ]
+              ++ config.githubActions.setUpNix
+              ++ [
                 { run = "nix flake --print-build-logs --accept-flake-config check"; }
               ];
             };

@@ -11,10 +11,16 @@
           "uses": "actions/checkout@v4"
         },
         {
-          "uses": "cachix/install-nix-action@master"
+          "uses": "nixbuild/nix-quick-install-action@master",
+          "with": {
+            "nix_conf": "keep-env-derivations = true\nkeep-outputs = true\n"
+          }
         },
         {
-          "uses": "DeterminateSystems/magic-nix-cache-action@main"
+          "uses": "nix-community/cache-nix-action@main",
+          "with": {
+            "primary-key": "a-single-key"
+          }
         },
         {
           "run": "nix build -vv --print-build-logs --accept-flake-config .#website"
