@@ -120,6 +120,8 @@
       ];
 
       treefmt.settings.global.excludes = [ workflowPath ];
+
+      make-shells.default.packages = [ pkgs.nodePackages_latest.live-server ];
     };
 
 }
