@@ -130,7 +130,7 @@ let
                                   "h-screen"
                                   "flex"
                                   "flex-col"
-                                  "sm:flex-row"
+                                  "sm:flex-row-reverse"
                                 ]
                                 |> lib.concatStringsSep " ";
                             }
