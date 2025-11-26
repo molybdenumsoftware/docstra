@@ -18,6 +18,7 @@
                 a
                 h1
                 h2
+                h3
                 ;
             in
             {
@@ -59,6 +60,8 @@
                         ])
                         (h2 { id = "background"; } "Background")
                         (p "Some background")
+                        (h3 { id = "deeper"; } "Deeper")
+                        (p "more")
                         (h2 { id = "description"; } "Description")
                         (p config.metadata.description.ir)
                         (h2 { id = "goals"; } "Goals")

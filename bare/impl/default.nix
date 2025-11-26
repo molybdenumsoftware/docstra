@@ -57,7 +57,7 @@ let
                       |> lib.ifilter0 (i: v: !(i == 0 && v.level == 1))
                       |> map (
                         heading:
-                        li (
+                        li { class = "ms-[${toString (heading.level - 1)}ch]"; } (
                           if heading.id == null then
                             config.htnl.raw heading.content
                           else
