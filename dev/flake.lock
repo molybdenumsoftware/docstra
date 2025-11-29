@@ -141,17 +141,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1763357310,
-        "narHash": "sha256-FGzXpOYJHmd6BzzTGMrxpspfbpSfa0fEvS5PRz089gU=",
+        "lastModified": 1764426115,
+        "narHash": "sha256-HTwegFi7usQHPIkfGk8cqKiv3VTyvmkWaxBjhwxYJtQ=",
         "owner": "molybdenumsoftware",
         "repo": "htnl",
-        "rev": "fd21209db27f8d15fc9a62f202e874029f7e87b6",
+        "rev": "2f1504c116c82c8fc4078ef2f840358503a2ad81",
         "type": "github"
       },
       "original": {
         "owner": "molybdenumsoftware",
         "repo": "htnl",
-        "rev": "fd21209db27f8d15fc9a62f202e874029f7e87b6",
         "type": "github"
       }
     },

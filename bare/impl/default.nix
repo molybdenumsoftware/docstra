@@ -42,22 +42,30 @@ let
               ul { class = "bg-gray-800 p-1"; } (
                 config.pages
                 |> lib.mapAttrsToList (
-                  _: page:
-                  li [
-                    (a { href = page.path; } page.title)
-                    (ul (
-                      page.headings
-                      |> lib.ifilter0 (i: v: !(i == 0 && v.level == 1))
+                  pageId: page:
+                  let
+                    recurse =
+                      headings:
+                      headings
                       |> map (
                         heading:
-                        li { class = "ms-[${toString (heading.level - 1)}ch]"; } (
-                          if heading.id == null then
-                            config.htnl.raw heading.content
-                          else
-                            a { href = "${page.path}#${heading.id}"; } (config.htnl.raw heading.content)
-                        )
-                      )
-                    ))
+                        if heading.level == 1 then
+                          lib.optionals (heading ? subHeadings) (recurse heading.subHeadings)
+                        else
+                          li { class = "ms-[1ch]"; } [
+                            (
+                              if heading ? id then
+                                a { href = "${page.path}#${heading.id}"; } (config.htnl.raw heading.content)
+                              else
+                                config.htnl.raw heading.content
+                            )
+                            (lib.optionals (heading ? subHeadings) (ul (recurse heading.subHeadings)))
+                          ]
+                      );
+                  in
+                  li [
+                    (a { href = page.path; } page.title)
+                    (ul (recurse page.headings))
                   ]
                 )
               )
@@ -79,7 +87,7 @@ let
                       internal = true;
                       readOnly = true;
                       type = lib.types.listOf lib.types.unspecified;
-                      default = page.config.contentProcessed.headings;
+                      default = page.config.contentProcessed.headings.nested;
                     };
                     contentProcessed = lib.mkOption {
                       internal = true;
