@@ -21,7 +21,7 @@ let
         options = {
           metadata.title = lib.mkOption { type = lib.types.singleLineStr; };
           htnl = lib.mkOption {
-            type = lib.types.attrsOf lib.types.anything;
+            type = lib.types.unspecified;
             readOnly = true;
             default =
               builtins.fetchTarball {
