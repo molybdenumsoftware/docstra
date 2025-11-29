@@ -34,7 +34,7 @@ let
             };
           };
           pkgs = lib.mkOption { type = lib.types.pkgs; };
-          tableOfContents = lib.mkOption {
+          navigation = lib.mkOption {
             internal = true;
             readOnly = true;
             type = lib.types.unspecified;
@@ -129,7 +129,7 @@ let
                             }
                             [
                               (div { class = "p-1 flex-grow"; } page.config.contentIr)
-                              config.tableOfContents
+                              config.navigation
                             ]
                           )
                         ]
