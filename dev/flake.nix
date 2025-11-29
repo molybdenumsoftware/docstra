@@ -26,7 +26,7 @@
     };
 
     htnl = {
-      url = "github:molybdenumsoftware/htnl";
+      url = "github:molybdenumsoftware/htnl/fd21209db27f8d15fc9a62f202e874029f7e87b6";
       inputs = {
         flake-parts.follows = "dedupe_flake-parts";
         nixpkgs-lib.follows = "nixpkgs";

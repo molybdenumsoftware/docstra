@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   ...
 }:
 {
@@ -23,6 +24,7 @@
             in
             {
               inherit pkgs;
+              htnl = inputs.htnl.lib;
               metadata = { inherit (config.metadata) title; };
               pages = {
                 index = {

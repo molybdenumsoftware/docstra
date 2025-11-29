@@ -22,13 +22,6 @@ let
           metadata.title = lib.mkOption { type = lib.types.singleLineStr; };
           htnl = lib.mkOption {
             type = lib.types.unspecified;
-            readOnly = true;
-            default =
-              builtins.fetchTarball {
-                url = "https://github.com/molybdenumsoftware/htnl/archive/fd21209db27f8d15fc9a62f202e874029f7e87b6.tar.gz";
-                sha256 = "01gn7hylfkrfpp24fswzjip5zjm6y751ilrw0xx6f7h9wsjdfv0l";
-              }
-              |> (tarball: import tarball { inherit lib; });
           };
           outputs = {
             website = lib.mkOption {
