@@ -25,6 +25,14 @@
       url = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/nix.min.js";
     };
 
+    htnl = {
+      url = "github:molybdenumsoftware/htnl";
+      inputs = {
+        flake-parts.follows = "dedupe_flake-parts";
+        nixpkgs-lib.follows = "nixpkgs";
+      };
+    };
+
     import-tree.url = "github:vic/import-tree";
 
     make-shell = {
