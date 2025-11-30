@@ -1,223 +1,4 @@
 { lib }:
-let
-  implModules = [
-    (
-      { config, ... }:
-      let
-        inherit (config.htnl.polymorphic.partials)
-          html
-          div
-          ul
-          li
-          a
-          head
-          title
-          link
-          meta
-          body
-          ;
-      in
-      {
-        options = {
-          metadata.title = lib.mkOption { type = lib.types.singleLineStr; };
-          htnl = lib.mkOption {
-            type = lib.types.unspecified;
-          };
-          outputs = {
-            website = lib.mkOption {
-              readOnly = true;
-              type = lib.types.package;
-            };
-            validation = lib.mkOption {
-              readOnly = true;
-              type = lib.types.package;
-            };
-          };
-          pkgs = lib.mkOption { type = lib.types.pkgs; };
-          navigation = lib.mkOption {
-            internal = true;
-            readOnly = true;
-            type = lib.types.unspecified;
-            default = (
-              ul { class = "bg-gray-800 p-1"; } (
-                config.pages
-                |> lib.mapAttrsToList (
-                  pageId: page:
-                  let
-                    recurse =
-                      headings:
-                      headings
-                      |> map (
-                        heading:
-                        if heading.level == 1 then
-                          lib.optionals (heading ? subHeadings) (recurse heading.subHeadings)
-                        else
-                          li { class = "ms-[1ch]"; } [
-                            (
-                              if heading ? id then
-                                a { href = "${page.path}#${heading.id}"; } (config.htnl.raw heading.content)
-                              else
-                                config.htnl.raw heading.content
-                            )
-                            (lib.optionals (heading ? subHeadings) (ul (recurse heading.subHeadings)))
-                          ]
-                      );
-                  in
-                  li [
-                    (a { href = page.path; } page.title)
-                    (ul (recurse page.headings))
-                  ]
-                )
-              )
-            );
-
-          };
-          pages = lib.mkOption {
-            type = lib.types.attrsOf (
-              lib.types.submodule (
-                page@{ name, ... }:
-                {
-                  options = {
-                    path = lib.mkOption {
-                      readOnly = true;
-                      type = lib.types.singleLineStr;
-                      default = "/${page.name}.html";
-                    };
-                    headings = lib.mkOption {
-                      internal = true;
-                      readOnly = true;
-                      type = lib.types.listOf lib.types.unspecified;
-                      default = page.config.contentProcessed.headings.nested;
-                    };
-                    contentProcessed = lib.mkOption {
-                      internal = true;
-                      readOnly = true;
-                      type = lib.types.unspecified;
-                      default = page.config.contentIr |> config.htnl.process;
-                    };
-                    contentIr = lib.mkOption {
-                      internal = true;
-                      readOnly = true;
-                      type = lib.types.unspecified;
-                      default = page.config.content |> map (piece: div { class = "prose prose-invert"; } piece.htnl);
-                    };
-                    ir = lib.mkOption {
-                      internal = true;
-                      readOnly = true;
-                      type = lib.types.unspecified;
-                      default =
-                        html { lang = "en"; } [
-                          (head [
-                            (title [
-                              page.config.title
-                              " | "
-                              config.metadata.title
-                            ])
-                            (link {
-                              rel = "stylesheet";
-                              href = "./style.css";
-                            })
-                            (meta {
-                              name = "viewport";
-                              content = "width=device-width, initial-scale=1.0";
-                            })
-                          ])
-                          (body
-                            {
-                              class =
-                                [
-                                  "bg-black"
-                                  "text-white"
-                                  "h-screen"
-                                  "flex"
-                                  "flex-col"
-                                  "sm:flex-row-reverse"
-                                ]
-                                |> lib.concatStringsSep " ";
-                            }
-                            [
-                              (div { class = "p-1 flex-grow"; } page.config.contentIr)
-                              config.navigation
-                            ]
-                          )
-                        ]
-                        |> config.htnl.document;
-                    };
-                    title = lib.mkOption {
-                      type = lib.types.singleLineStr;
-                    };
-                    content = lib.mkOption {
-                      type = lib.types.listOf (
-                        lib.types.attrTag {
-                          htnl = lib.mkOption {
-                            type = lib.types.listOf (
-                              lib.types.oneOf [
-                                lib.types.str
-                                (
-                                  lib.types.attrsOf lib.types.anything
-                                  |> lib.flip lib.types.addCheck (v: v.type or null == "htnl-element")
-                                )
-                                (
-                                  lib.types.attrsOf lib.types.anything
-                                  |> lib.flip lib.types.addCheck (v: v.type or null == "htnl-raw")
-                                )
-                              ]
-                            );
-                          };
-                        }
-                      );
-                    };
-                  };
-                }
-              )
-            );
-          };
-        };
-        config = {
-          outputs = {
-            website =
-              let
-                inputCss = config.pkgs.writeText "input.css" ''
-                  @import "tailwindcss";
-                  @plugin "@tailwindcss/typography";
-                '';
-              in
-              config.pages
-              |> lib.mapAttrs' (
-                pageId: page: {
-                  name = page.path;
-                  value = page.ir;
-                }
-              )
-              |> (
-                htmlDocuments:
-                config.htnl.bundle config.pkgs {
-                  inherit htmlDocuments;
-                }
-              )
-              |> (
-                bundle:
-                config.pkgs.runCommand "${config.pages.index.title}-website"
-                  {
-                    nativeBuildInputs = [
-                      config.pkgs.validator-nu
-                      config.pkgs.tailwindcss_4
-                    ];
-                  }
-                  ''
-                    mkdir $out
-                    cp -r ${bundle}/* $out
-                    html_files=$(find -L $out -not -path $out'/nix/store/*' -type f)
-                    vnu --Werror $html_files
-                    tailwindcss -i ${inputCss} --cwd $out -o $out/style.css
-                  ''
-              );
-          };
-        };
-      }
-    )
-  ];
-in
 {
   evalDocs =
     args@{ modules, ... }:
@@ -225,7 +6,26 @@ in
       args
       // {
         class = "docstra";
-        modules = lib.concat implModules modules;
+        modules =
+          let
+            recurse =
+              path:
+              path
+              |> builtins.readDir
+              |> lib.mapAttrsToList (
+                fileName: fileType:
+                let
+                  filePath = path + "/${fileName}";
+                in
+                if fileType == "regular" then
+                  filePath
+                else if fileType == "directory" then
+                  recurse filePath
+                else
+                  throw "${filePath} has unsupported file type ${fileType}"
+              );
+          in
+          ./modules |> recurse |> lib.flatten |> lib.concat modules;
       }
     );
 }
