@@ -11,7 +11,7 @@ in
       )
     );
     default = {
-      lazyAttrsOf = option: p "lazyAttrsOf";
+      lazyAttrsOf = option: (p "lazyAttrsOf");
       bool = option: p "bool";
       nullOr = option: p "nullOr";
       unspecified = option: p "unspecified";
@@ -34,7 +34,7 @@ in
         (p "Nixpkgs module system configuration")
         (p [
           "Class: "
-          v.result.class
+          (code v.result.class)
         ])
         (p "Options:")
         # TODO what about the contents of `_module`?
