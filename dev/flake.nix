@@ -2,6 +2,11 @@
   inputs = {
     files.url = "github:mightyiam/files";
 
+    flake-compat = {
+      url = "https://git.lix.systems/lix-project/flake-compat/archive/main.tar.gz";
+      flake = false;
+    };
+
     git-hooks = {
       url = "github:cachix/git-hooks.nix";
       inputs = {
