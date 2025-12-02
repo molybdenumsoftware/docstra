@@ -12,6 +12,13 @@ let
 in
 {
   options = {
+    contentTypes = lib.mkOption {
+      internal = true;
+      type = lib.types.attrsOf (
+        # module system option
+        lib.types.unspecified
+      );
+    };
     pages = lib.mkOption {
       type = lib.types.attrsOf (
         lib.types.submodule (
@@ -87,25 +94,7 @@ in
                 type = lib.types.singleLineStr;
               };
               content = lib.mkOption {
-                type = lib.types.listOf (
-                  lib.types.attrTag {
-                    htnl = lib.mkOption {
-                      type = lib.types.listOf (
-                        lib.types.oneOf [
-                          lib.types.str
-                          (
-                            lib.types.attrsOf lib.types.anything
-                            |> lib.flip lib.types.addCheck (v: v.type or null == "htnl-element")
-                          )
-                          (
-                            lib.types.attrsOf lib.types.anything
-                            |> lib.flip lib.types.addCheck (v: v.type or null == "htnl-raw")
-                          )
-                        ]
-                      );
-                    };
-                  }
-                );
+                type = lib.types.listOf (lib.types.attrTag config.contentTypes);
               };
             };
           }
