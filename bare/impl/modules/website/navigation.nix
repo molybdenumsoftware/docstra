@@ -8,7 +8,7 @@ in
     readOnly = true;
     type = lib.types.unspecified;
     default = (
-      ul { class = "bg-gray-800 p-1"; } (
+      ul { class = "bg-gray-800 p-1 shrink-0"; } (
         config.pages
         |> lib.mapAttrsToList (
           pageId: page:
