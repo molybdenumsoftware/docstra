@@ -10,20 +10,23 @@
   };
   config.perSystem =
     { pkgs, ... }:
-    let
-      documentation = config.lib.evalDocs {
-        modules = [
-          {
-            inherit pkgs;
-            htnl = inputs.htnl.lib;
-          }
-          config.documentation.module
-        ];
-      };
-
-    in
     {
-      packages.website = documentation.config.outputs.website;
+      packages.website =
+        {
+          modules = [
+            {
+              inherit pkgs;
+              htnl = inputs.htnl.lib;
+            }
+            config.documentation.module
+          ];
+        }
+        |> config.lib.evalDocs
+        |> lib.getAttrFromPath [
+          "config"
+          "outputs"
+          "website"
+        ];
 
       make-shells.default.packages = [ pkgs.nodePackages_latest.live-server ];
     };
