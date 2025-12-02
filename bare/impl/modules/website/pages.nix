@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  options,
+  ...
+}:
 let
   inherit (config.htnl.polymorphic.partials)
     html
@@ -15,8 +20,20 @@ in
     contentTypes = lib.mkOption {
       internal = true;
       type = lib.types.attrsOf (
-        # module system option
-        lib.types.unspecified
+        lib.types.submodule {
+          options = {
+            option = lib.mkOption {
+              # module system option
+              type = lib.types.unspecified;
+            };
+            toHtnl = lib.mkOption {
+              type = lib.types.functionTo (
+                # htnl IR
+                lib.types.unspecified
+              );
+            };
+          };
+        }
       );
     };
     pages = lib.mkOption {
@@ -46,7 +63,10 @@ in
                 internal = true;
                 readOnly = true;
                 type = lib.types.unspecified;
-                default = page.config.content |> map (piece: div { class = "prose prose-invert"; } piece.htnl);
+                default =
+                  page.config.content
+                  |> map (piece: piece |> lib.attrsToList |> lib.head)
+                  |> map ({ name, value }: config.contentTypes.${name}.toHtnl value);
               };
               ir = lib.mkOption {
                 internal = true;
@@ -94,7 +114,9 @@ in
                 type = lib.types.singleLineStr;
               };
               content = lib.mkOption {
-                type = lib.types.listOf (lib.types.attrTag config.contentTypes);
+                type = lib.types.listOf (
+                  config.contentTypes |> lib.mapAttrs (tag: lib.getAttr "option") |> lib.types.attrTag
+                );
               };
             };
           }
