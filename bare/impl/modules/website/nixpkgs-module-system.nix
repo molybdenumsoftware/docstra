@@ -40,26 +40,21 @@ in
         # TODO what about the contents of `_module`?
         (
           v.result.options
-          |> (
-            options:
-            let
-              recurse =
-                path: v:
-                if lib.isOption v then
-                  div [
-                    (path |> lib.concatStringsSep "." |> code |> p)
-                    (lib.optional (v.internal or false) (p (code "internal")))
-                    (lib.optional (v.readOnly or false) (p (code "readOnly")))
-                    (p [
-                      "Type: "
-                      (code v.type.name)
-                    ])
-                    (config.subjects.nixpkgsModuleSystem.htnlMappers.${v.type.name} v)
-                  ]
-                else
-                  v |> lib.mapAttrsToList (name: value: recurse (lib.concat path [ name ]) value);
-            in
-            recurse [ ] options
+          |> lib.optionAttrSetToDocList
+          |> map (
+            option:
+            lib.trace (lib.attrNames option) (div [
+              (p (code option.name))
+              (
+                [
+                  { name = "internal"; }
+                  { name = "readOnly"; }
+                ]
+                |> map (
+                  attribute: lib.optional (lib.attrByPath [ attribute.name ] false option) (p (code attribute.name))
+                )
+              )
+            ])
           )
         )
       ];
