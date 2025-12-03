@@ -84,6 +84,7 @@ in
                   )
                 ))
                 (lib.optional (lib.isString option.description) (
+                  # TODO convert markdown to HTML
                   pre { class = "mt-[1lh]"; } (code option.description)
                 ))
                 # TODO use shared gap instead of these `mt-[1lh]`
