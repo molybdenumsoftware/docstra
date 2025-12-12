@@ -15,8 +15,12 @@
                 config.metadata.title
                 " options reference"
               ])
-              (p "Sorry, just a stub right now")
             ];
+          }
+          {
+            nixpkgsModuleSystem = {
+              result = config.lib.evalDocs { modules = [ ]; };
+            };
           }
         ];
       };
