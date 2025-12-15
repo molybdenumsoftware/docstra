@@ -12,13 +12,13 @@
       description = {
         plaintext = lib.mkOption {
           type = lib.types.singleLineStr;
-          default = "Nix-powered documentation authoring library";
+          default = "Nix library for authoring documentation";
         };
         ir = lib.mkOption {
           type = lib.types.unspecified;
           default = [
             (a { href = "https://nix.dev/"; } "Nix")
-            "-powered documentation authoring library"
+            " library for authoring documentation"
           ];
         };
 
